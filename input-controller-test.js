@@ -80,31 +80,30 @@ function random(min, max) {
 }
 
 setInterval( function(){ 
-  // console.log(checkFocus(screen))
   if (controller.isActionActive("top")){
     y = y - 5;
   }
-  // if(controller.isActionActive("bottom")){
-  //   y = y + 5;
-  // }
-  // if (controller.isActionActive("left")){
-  //   x = x - 5;
-  // }
-  // if (controller.isActionActive("right")){
-  //   x = x + 5;
-  // }
-  // if (isSpace && controller.isActionActive("space")){
-  //   block.style.backgroundColor = colors[random(0, colors.length - 1)];
-  // }
+  if(controller.isActionActive("bottom")){
+    y = y + 5;
+  }
+  if (controller.isActionActive("left")){
+    x = x - 5;
+  }
+  if (controller.isActionActive("right")){
+    x = x + 5;
+  }
+  if (isSpace && controller.isActionActive("space")){
+    block.style.backgroundColor = colors[random(0, colors.length - 1)];
+  }
   console.log(controller.ACTION_DEACTIVATED)
   // if (controller.ACTION_ACTIVATED) {
   //   activatedBlock.innerHTML = "input-controller:action-activated" ;
   // } else {
   //   activatedBlock.innerHTML = "" ;
   // }
-  if (controller.ACTION_DEACTIVATED) {
-    activatedBlock.innerHTML = "input-controller:action-deactivated" ;
-  }
+  // if (controller.ACTION_DEACTIVATED) {
+  //   activatedBlock.innerHTML = "input-controller:action-deactivated" ;
+  // }
   block.style.transform = `translate(${x}%, ${y}%)`;
 }, 100 );
 

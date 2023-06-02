@@ -24,8 +24,13 @@ class InputController {
       const isPressed = this.isKeyPressed(key);
       if (isPressed === true){
         result = true;
+        this.ACTION_ACTIVATED = true;
+      } else {
+        this.ACTION_ACTIVATED = false;
+        this.ACTION_DEACTIVATED = true;
       }
     })
+    this.noKeyPress()
     return result;
   }
 
@@ -74,6 +79,18 @@ class InputController {
     }
     this.bindActions(_actions);
   }
+
+  noKeyPress(){
+    let _actions = this.actions;
+    for (let action in _actions){
+      _actions[action].keys.forEach( (key) => {
+        _actions[action].isPressed = null;
+      })
+    }
+    this.bindActions(_actions);
+    this.ACTION_DEACTIVATED = false;
+  }
+
 
 
   isKeyPressed(keyCode){
