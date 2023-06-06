@@ -95,7 +95,7 @@ setInterval( function(){
   if (isSpace && controller.isActionActive("space")){
     block.style.backgroundColor = colors[random(0, colors.length - 1)];
   }
-  console.log(controller.ACTION_DEACTIVATED)
+    
   // if (controller.ACTION_ACTIVATED) {
   //   activatedBlock.innerHTML = "input-controller:action-activated" ;
   // } else {
@@ -103,6 +103,8 @@ setInterval( function(){
   // }
   // if (controller.ACTION_DEACTIVATED) {
   //   activatedBlock.innerHTML = "input-controller:action-deactivated" ;
+  // } else {
+  //   activatedBlock.innerHTML = "" ;
   // }
   block.style.transform = `translate(${x}%, ${y}%)`;
 }, 100 );

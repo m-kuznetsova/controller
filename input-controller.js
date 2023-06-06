@@ -2,7 +2,7 @@ class InputController {
   constructor( actionsToBind, target ) {
     this.target = target;
     this.enabled = true;
-    this.focused = false;
+    this.focused;
     this.ACTION_ACTIVATED;
     this.ACTION_DEACTIVATED;
     this.actions = {};
@@ -30,7 +30,6 @@ class InputController {
         this.ACTION_DEACTIVATED = true;
       }
     })
-    this.noKeyPress()
     return result;
   }
 
@@ -80,7 +79,7 @@ class InputController {
     this.bindActions(_actions);
   }
 
-  noKeyPress(){
+  clearPressedKeys(){
     let _actions = this.actions;
     for (let action in _actions){
       _actions[action].keys.forEach( (key) => {
@@ -90,8 +89,6 @@ class InputController {
     this.bindActions(_actions);
     this.ACTION_DEACTIVATED = false;
   }
-
-
 
   isKeyPressed(keyCode){
     let result = null;
