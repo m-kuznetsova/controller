@@ -67,11 +67,27 @@ class InputController {
     let _actions = this.actions;
     for (let action in _actions){
       _actions[action].keys.forEach( (key) => {
+        if (!_actions[action].isPressed){
+          _actions[action].isPressed = []
+        }
         if (key === keyCode){
           if (keyType === "keydown"){
-            _actions[action].isPressed = true;
+            let isNewCode = false;
+            _actions[action].isPressed.forEach((item) => {
+              if (item === keyCode){
+                isNewCode = true;
+              }
+            })
+            if (!isNewCode){
+              _actions[action].isPressed.push(keyCode);
+            }
           } else {
-            _actions[action].isPressed = false;
+            let code = _actions[action].isPressed;
+            code.forEach((item, index) => {
+              if (item === keyCode){
+                _actions[action].isPressed.splice(index)
+              }
+            })
           }
         }
       })
@@ -96,9 +112,9 @@ class InputController {
     for (let action in _actions){
       _actions[action].keys.forEach( (key) => {
         if (key === keyCode){
-          if (_actions[action].isPressed === true){
+          if (_actions[action].isPressed?.length > 0){
             result = true;
-          } else if (_actions[action].isPressed === false){
+          } else {
             result = false;
           }
         }

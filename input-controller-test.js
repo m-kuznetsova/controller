@@ -29,11 +29,11 @@ buttons.forEach( (item) => {
   item.addEventListener("click", onClick);
 })
 
+controller.attach(screen);
 function onClick(e){
   e.target.blur();
   const id = e.target.id;
   if (id === "attach"){
-    controller.attach(screen);
     changeClass("detach", e);
   }
   if (id === "detach"){
