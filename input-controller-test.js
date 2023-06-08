@@ -14,7 +14,6 @@ const controllerActions = {
   },
   "space": {
     keys: [32] 
-
   }
 } 
 
@@ -29,11 +28,12 @@ buttons.forEach( (item) => {
   item.addEventListener("click", onClick);
 })
 
-controller.attach(screen);
+// controller.attach(screen);
 function onClick(e){
   e.target.blur();
   const id = e.target.id;
   if (id === "attach"){
+    controller.attach(screen);
     changeClass("detach", e);
   }
   if (id === "detach"){
@@ -79,7 +79,7 @@ function random(min, max) {
   return Math.round(rand);
 }
 
-setInterval( function(){ 
+screen.addEventListener(controller.ACTION_ACTIVATED, function (e){ 
   if (controller.isActionActive("top")){
     y = y - 5;
   }
@@ -95,17 +95,7 @@ setInterval( function(){
   if (isSpace && controller.isActionActive("space")){
     block.style.backgroundColor = colors[random(0, colors.length - 1)];
   }
-    
-  // if (controller.ACTION_ACTIVATED) {
-  //   activatedBlock.innerHTML = "input-controller:action-activated" ;
-  // } else {
-  //   activatedBlock.innerHTML = "" ;
-  // }
-  // if (controller.ACTION_DEACTIVATED) {
-  //   activatedBlock.innerHTML = "input-controller:action-deactivated" ;
-  // } else {
-  //   activatedBlock.innerHTML = "" ;
-  // }
   block.style.transform = `translate(${x}%, ${y}%)`;
-}, 100 );
+}, false);
 
+screen.addEventListener(controller.ACTION_DEACTIVATED, function (e){ console.log(controller.ACTION_DEACTIVATED)}, false);

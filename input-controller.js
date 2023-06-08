@@ -3,8 +3,9 @@ class InputController {
     this.target = target;
     this.enabled = true;
     this.focused;
-    this.ACTION_ACTIVATED;
-    this.ACTION_DEACTIVATED;
+    // this.ACTION_ACTIVATED = false;
+    this.ACTION_ACTIVATED = "input-controller:action-activated";
+    this.ACTION_DEACTIVATED = "input-controller:action-deactivated";
     this.actions = {};
     if (actionsToBind) this.bindActions(actionsToBind);
   }
@@ -24,10 +25,6 @@ class InputController {
       const isPressed = this.isKeyPressed(key);
       if (isPressed === true){
         result = true;
-        this.ACTION_ACTIVATED = true;
-      } else {
-        this.ACTION_ACTIVATED = false;
-        this.ACTION_DEACTIVATED = true;
       }
     })
     return result;
@@ -50,60 +47,78 @@ class InputController {
   attach(target, dontEnable){
     if (dontEnable) return;
     this.target = target;
-    this.keyPress = this.keyPress.bind(this);
-    target.addEventListener("keyup", this.keyPress, false);
-    target.addEventListener("keydown", this.keyPress, false);
+    this.keyUp = this.keyUp.bind(this);
+    this.keyDown = this.keyDown.bind(this);
+    target.addEventListener("keyup", this.keyUp, false);
+    target.addEventListener("keydown", this.keyDown, false);
   }
 
   detach(){
     const target = this.target;
-    target.removeEventListener("keyup", this.keyPress, false);
-    target.removeEventListener("keydown", this.keyPress, false);
+    target.removeEventListener("keyup", this.keyUp, false);
+    target.removeEventListener("keydown", this.keyDown, false);
+    this.target = null;
   }
 
-  keyPress(key){
+  actionState(action, isActionActive, target){
+    if (!action || !target || !isActionActive) {return};
+    let actionEvent;
+    if (isActionActive){
+      actionEvent = new CustomEvent(this.ACTION_ACTIVATED, {action: action});
+    } else {
+      actionEvent = new CustomEvent(this.ACTION_DEACTIVATED, {action: action});
+    }
+    target.dispatchEvent(actionEvent);
+  }
+
+  keyUp(key){
     const keyCode = key.keyCode;
     const keyType = key.type;
     let _actions = this.actions;
+    let currentAction;
     for (let action in _actions){
       _actions[action].keys.forEach( (key) => {
         if (!_actions[action].isPressed){
           _actions[action].isPressed = []
         }
         if (key === keyCode){
-          if (keyType === "keydown"){
-            let isNewCode = false;
-            _actions[action].isPressed.forEach((item) => {
-              if (item === keyCode){
-                isNewCode = true;
-              }
-            })
-            if (!isNewCode){
-              _actions[action].isPressed.push(keyCode);
+          let isNewCode = false;
+          _actions[action].isPressed.forEach((item) => {
+            if (item === keyCode){
+              isNewCode = true;
             }
-          } else {
-            let code = _actions[action].isPressed;
-            code.forEach((item, index) => {
-              if (item === keyCode){
-                _actions[action].isPressed.splice(index)
-              }
-            })
+          })
+          if (!isNewCode){
+            _actions[action].isPressed.push(keyCode);
+              currentAction = action;
           }
         }
       })
     }
     this.bindActions(_actions);
+    this.actionState(currentAction, true, this.target)
   }
 
-  clearPressedKeys(){
+  keyDown(key){
+    const keyCode = key.keyCode;
+    const keyType = key.type;
     let _actions = this.actions;
+    let currentAction;
     for (let action in _actions){
       _actions[action].keys.forEach( (key) => {
-        _actions[action].isPressed = null;
+        if (key === keyCode){ 
+          currentAction = action;
+          let code = _actions[action].isPressed;
+          code?.forEach((item, index) => {
+            if (item === keyCode){
+              _actions[action].isPressed.splice(index)
+            }
+          })
+        }
       })
     }
     this.bindActions(_actions);
-    this.ACTION_DEACTIVATED = false;
+    this.actionState(currentAction, false, this.target)
   }
 
   isKeyPressed(keyCode){
