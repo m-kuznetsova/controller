@@ -28,7 +28,7 @@ buttons.forEach( (item) => {
   item.addEventListener("click", onClick);
 })
 
-// controller.attach(screen);
+controller.attach(screen);
 function onClick(e){
   e.target.blur();
   const id = e.target.id;
@@ -79,7 +79,8 @@ function random(min, max) {
   return Math.round(rand);
 }
 
-screen.addEventListener(controller.ACTION_ACTIVATED, function (e){ 
+function moving(e){
+  // console.log("!!!!! ", controller.isActionActive("top"))
   if (controller.isActionActive("top")){
     y = y - 5;
   }
@@ -96,6 +97,8 @@ screen.addEventListener(controller.ACTION_ACTIVATED, function (e){
     block.style.backgroundColor = colors[random(0, colors.length - 1)];
   }
   block.style.transform = `translate(${x}%, ${y}%)`;
-}, false);
 
-screen.addEventListener(controller.ACTION_DEACTIVATED, function (e){ console.log(controller.ACTION_DEACTIVATED)}, false);
+}
+
+screen.addEventListener(controller.ACTION_ACTIVATED, moving, false);
+screen.addEventListener(controller.ACTION_DEACTIVATED, () => {}, false);
