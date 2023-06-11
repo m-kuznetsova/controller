@@ -28,7 +28,7 @@ buttons.forEach( (item) => {
   item.addEventListener("click", onClick);
 })
 
-controller.attach(screen);
+// controller.attach(screen);
 function onClick(e){
   e.target.blur();
   const id = e.target.id;
