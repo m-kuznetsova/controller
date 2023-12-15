@@ -1,24 +1,6 @@
-const controllerActions = {
-  "left": { 
-    keys: [37, 65],
-    enable: false
-  },
-  "right": {
-    keys: [39, 68]
-  },
-  "top": {
-    keys: [38, 87]
-  },
-  "bottom": {
-    keys: [34, 83]
-  },
-  "space": {
-    keys: [32] 
-  }
-} 
-
 const screen = document.querySelector(".main__screen");
-const controller = new InputController(controllerActions, screen);
+const keyboardPlugin = new KeyboardPlugin();
+const controller = new InputController(actionsSettings.keyboard, screen, keyboardPlugin);
 const buttons = document.querySelectorAll(".main__button");
 const block = document.querySelector(".main__block");
 const activatedBlock = document.querySelector(".main__info");
@@ -28,7 +10,6 @@ buttons.forEach( (item) => {
   item.addEventListener("click", onClick);
 })
 
-// controller.attach(screen);
 function onClick(e){
   e.target.blur();
   const id = e.target.id;
@@ -41,12 +22,12 @@ function onClick(e){
     changeClass("attach", e);
   }
   if (id === "activate"){
-    controller.enabled = true;
-    changeClass("deactivate", false);
+    controller.setEnabled(true);
+    changeClass("deactivate", e, ["attach"]);
   }
   if (id === "deactivate"){
-    controller.enabled = false;
-    changeClass(false, e);
+    controller.setEnabled(false);
+    changeClass("activate", e, ["attach"]);
   }
   if (id === "space"){
     if (!isSpace){
@@ -54,18 +35,20 @@ function onClick(e){
       changeClass(false, e);
     } else {
       isSpace = false;
-      changeClass("space", false);
+      changeClass("space", false, ["attach", "activate", "deactivate"]);
     }
   }
 }
 
-function changeClass(id, e){
+function changeClass(id, e, exclude){
   if (id){
     buttons.forEach((item) => {
-      item.id === id &&  item.classList.remove("main__button_active");
+       !exclude || !exclude.find(i => item.id === i) && item.classList.remove("main__button_active");
     })
   }
   if (e){
+    e.target.id === "attach" && document.querySelector(".main__buttons").classList.remove("main__buttons_noAttached");
+    e.target.id === "detach" && document.querySelector(".main__buttons").classList.add("main__buttons_noAttached");
     e.target.classList.add("main__button_active");
   }
 }
@@ -80,11 +63,10 @@ function random(min, max) {
 }
 
 function moving(e){
-  // console.log("!!!!! ", controller.isActionActive("top"))
   if (controller.isActionActive("top")){
     y = y - 5;
   }
-  if(controller.isActionActive("bottom")){
+  if (controller.isActionActive("bottom")){
     y = y + 5;
   }
   if (controller.isActionActive("left")){
