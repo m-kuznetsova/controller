@@ -18,7 +18,7 @@ const actionsSettings = {
     },
     {
       name: "bottom",
-      keys: [34, 83],
+      keys: [40, 83],
       isActive: false
     },
     {
