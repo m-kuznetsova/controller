@@ -3,10 +3,11 @@ class Action {
   constructor(data){
     this.data = data;
     this.isActive = isActive;
+    this.enable = this.data.enable;
   }
 
   set activeState(state){
-    this.isActive = state;
+    if (state !== this.isActive) this.isActive = state;
   }
 
   get activeState(){
