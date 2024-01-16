@@ -1,25 +1,30 @@
 const actionsSettings = {
-  keyboard: {
-    left: {
+  arr: [
+    {
+      name: "left",
       keys: [37, 65],
       enable: false,
       isActive: false
     },
-    right: {
+    {
+      name: "right",
       keys: [39, 68],
       isActive: false
     },
-    top: {
+    {
+      name: "top",
       keys: [38, 87],
       isActive: false
     },
-    bottom: {
+    {
+      name: "bottom",
       keys: [34, 83],
       isActive: false
     },
-    space: {
+    {
+      name: "space",
       keys: [32],
       isActive: false
     }
-  }
+  ]
 }

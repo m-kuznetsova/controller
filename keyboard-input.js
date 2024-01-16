@@ -1,6 +1,5 @@
 class KeyboardPlugin {
   constructor() {
-
     this.keyDown = this.keyDown.bind(this);
     this.keyUp = this.keyUp.bind(this);
     this.ACTION_ACTIVATED = "input-controller:action-activated";
@@ -9,6 +8,11 @@ class KeyboardPlugin {
     this.target = null;
     this.isKeyPressed = this.isKeyPressed.bind(this);
     this.enabled = false;
+  }
+
+  checkAction(action){
+    const item = this.actions.find((item) => item.data.name === action).data;
+    return item.enable !== false && item.isPressed && item.isPressed.length > 0;
   }
 
   setActionsAndTarget(actions, target){
@@ -35,8 +39,8 @@ class KeyboardPlugin {
   isActionActive(action){
     if (!this.enabled) {return}
     const _actions = this.actions;
-    if (_actions[action].enable === false) {return false}
-    return _actions[action].keys.find( key => this.isKeyPressed(key)) ? true : false;
+    if (_actions.find((item) => item.data.name === action).data.enable === false) {return false}
+    return _actions.find((item) => item.data.name === action).data.keys.find( key => this.isKeyPressed(key)) ? true : false;
   }
 
   actionState(action, isActionActive, target){
@@ -45,46 +49,25 @@ class KeyboardPlugin {
     target.dispatchEvent(actionEvent);
   }
 
-  keyDown(key){
-    const keyCode = key.keyCode;
-    let _actions = this.actions;
-    let currentAction;
-    for (let action in _actions){
-      if (_actions[action].keys.includes(keyCode)){
-        if (!_actions[action].isPressed){
-          _actions[action].isPressed = [];
-        }
-        if (!_actions[action].isPressed.includes(keyCode)){
-          _actions[action].isPressed.push(keyCode);
-        }
-        currentAction = action;
-      }
+  keyDown({keyCode}){
+    const item = this.actions.find((item) => item.data.keys.includes(keyCode));
+    if (!item.data.isPressed){
+      item.emptyPressed();
     }
-    this.actionState(currentAction, true, this.target);
+    if (!item.data.isPressed.includes(keyCode)){
+      item.addPressed(keyCode);
+    }
+    this.actionState(item.data.name, true, this.target);
   }
 
-  keyUp(key){
-    const keyCode = key.keyCode;
-    let _actions = this.actions;
-    let currentAction;
-    for (let action in _actions){
-      if (_actions[action].keys.includes(keyCode)){
-        _actions[action].isPressed = _actions[action].isPressed.filter( i => i != keyCode);
-        currentAction = action;
-      }
-    }
-    this.actionState(currentAction, false, this.target);
+  keyUp({keyCode}){
+    const item = this.actions.find((item) => item.data.keys.includes(keyCode));
+    item.removePressed(keyCode);
+    this.actionState(item.data.name, false, this.target);
   }
 
   isKeyPressed(keyCode){
-    let result = null;
-    let _actions = this.actions;
-    for (let action in _actions){
-      if (_actions[action].keys.includes(keyCode)){
-        result = _actions[action].isPressed?.length > 0 ? true : false;
-      }
-    }
-    return result;
+    return this.actions.find((item) => item.data.keys.includes(keyCode)).getPressedLength() > 0 ? true : false;
   }
 
 }

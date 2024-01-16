@@ -1,50 +1,55 @@
 class InputController {
   constructor( actionsToBind, target, registerPlugin ) {
     this.target = target;
-    this.enabled = true;
+    this.enabled = false;
     this.focused;
     this.actions = {};
     if (actionsToBind) this.actions = actionsToBind;
-    if (registerPlugin) this.registerPlugin = registerPlugin;
-    this.ACTION_ACTIVATED = this.registerPlugin.ACTION_ACTIVATED;
-    this.ACTION_DEACTIVATED = this.registerPlugin.ACTION_DEACTIVATED;
+    if (registerPlugin) this.plugins = registerPlugin;
+    this.plugins.forEach((item) => {
+      this.ACTION_ACTIVATED = item.ACTION_ACTIVATED;
+      this.ACTION_DEACTIVATED = item.ACTION_DEACTIVATED;
+    })
     this.setActionsAndTarget();
   }
 
   setActionsAndTarget(){
-    this.registerPlugin.setActionsAndTarget(this.actions, this.target)
+    this.plugins.forEach((item) => {item.setActionsAndTarget(this.actions, this.target)})
   }
 
   isActionActive(action){
-    return this.registerPlugin.isActionActive(action);
+    if (!this.enabled) return;
+    return this.plugins.find((item) => item.checkAction(action));
   }
 
   setEnabled(state){
     this.enabled = state;
-    this.registerPlugin.setEnabled(state);
+    this.plugins.forEach((item) => {item.setEnabled(state)})
   }
 
   enableAction(actionName){
     const actions = this.actions;
-    if (actions[actionName].enable === false){
-      actions[actionName].enable = true;
+    const item = actions.find((item) => item.data.name === actionName);
+    if (item.enable === false){
+      item.toggleEnable(true);
     }
   }
 
   disableAction(actionName){
     const actions = this.actions;
-    actions[actionName].enable = false;
+    const item = actions.find((item) => item.data.name === actionName);
+    item.toggleEnable(false);
   }
 
   attach(target, dontEnable){
     if (dontEnable) return;
     this.target = target;
-    this.registerPlugin.setListeners(true, target);
+    this.plugins.forEach((item) => {item.setListeners(true, target)})
   }
 
   detach(){
     const target = this.target;
-    this.registerPlugin.setListeners(false, target);
+    this.plugins.forEach((item) => {item.setListeners(false, target)})
     this.target = null;
   }
 }
