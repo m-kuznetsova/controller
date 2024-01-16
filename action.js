@@ -5,11 +5,11 @@ class Action {
   }
 
   setActive(state){
-    this.setActive = state;
+    this.isActive = state;
   }
 
   getActive(){
-    return this.setActive;
+    return this.isActive;
   }
 
   toggleEnable(state){
