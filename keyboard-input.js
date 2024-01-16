@@ -11,8 +11,8 @@ class KeyboardPlugin {
     this.pressed = [];
   }
 
-  checkAction(Action){
-    return Action.data.enable !== false && Action.data.keys.some((item) => this.isKeyPressed(item));
+  checkAction(action){
+    return action.data.keys.some((item) => this.isKeyPressed(item));
   }
 
   setActionsAndTarget(actions, target){
