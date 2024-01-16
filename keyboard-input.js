@@ -8,6 +8,7 @@ class KeyboardPlugin {
     this.target = null;
     this.isKeyPressed = this.isKeyPressed.bind(this);
     this.enabled = false;
+    this.pressed = [];
   }
 
   checkAction(action){
@@ -50,6 +51,7 @@ class KeyboardPlugin {
   }
 
   keyDown({keyCode}){
+    this.pressed.push(keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item.data.isPressed){
       item.emptyPressed();
@@ -61,13 +63,14 @@ class KeyboardPlugin {
   }
 
   keyUp({keyCode}){
+    this.pressed.filter( i => i !== keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     item.removePressed(keyCode);
     this.actionState(item.data.name, false, this.target);
   }
 
   isKeyPressed(keyCode){
-    return this.actions.find((item) => item.data.keys.includes(keyCode)).getPressedLength() > 0 ? true : false;
+    return this.pressed.find((item) => item === keyCode);
   }
 
 }
