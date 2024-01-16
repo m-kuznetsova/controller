@@ -19,7 +19,8 @@ class InputController {
 
   isActionActive(action){
     if (!this.enabled) return;
-    return this.plugins.find((item) => item.checkAction(action));
+    const plugin = this.plugins.find((item) => item.checkAction(action));
+    return plugin ? plugin.isActionActive(action) : null;
   }
 
   setEnabled(state){
