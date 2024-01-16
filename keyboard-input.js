@@ -11,9 +11,8 @@ class KeyboardPlugin {
     this.pressed = [];
   }
 
-  checkAction(action){
-    const item = this.actions.find((item) => item.data.name === action).data;
-    return item.enable !== false && item.isPressed && item.isPressed.some((item) => this.isKeyPressed(item));
+  checkAction(Action){
+    return Action.data.enable !== false && Action.data.keys.some((item) => this.isKeyPressed(item));
   }
 
   setActionsAndTarget(actions, target){
@@ -50,23 +49,16 @@ class KeyboardPlugin {
   }
 
   keyDown({keyCode}){
-    this.pressed.push(keyCode);
+    if (!this.pressed.some((item) => item === keyCode)) this.pressed.push(keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    if (!item.data.isPressed){
-      item.emptyPressed();
-    }
-    if (!item.data.isPressed.includes(keyCode)){
-      item.addPressed(keyCode);
-    }
     this.actionState(item.data.name, true, this.target);
   }
 
   keyUp({keyCode}){
-    this.pressed.filter( i => i !== keyCode);
+    this.pressed = this.pressed.filter( i => i !== keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    if (item.data.isPressed) item.removePressed(keyCode);
     this.actionState(item.data.name, false, this.target);
   }
 
