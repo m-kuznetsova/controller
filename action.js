@@ -1,14 +1,15 @@
 class Action {
+  isActive;
   constructor(data){
     this.data = data;
-    this.isActive = false;
+    this.isActive = isActive;
   }
 
-  setActive(state){
+  set activeState(state){
     this.isActive = state;
   }
 
-  getActive(){
+  get activeState(){
     return this.isActive;
   }
 
