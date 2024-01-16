@@ -64,7 +64,6 @@ function random(min, max) {
 }
 
 function moving(e){
-  // keyboardPlugin.checkAction("top");
   if (controller.isActionActive("top")){
     y = y - 5;
   }

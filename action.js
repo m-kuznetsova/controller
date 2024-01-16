@@ -23,11 +23,3 @@ class Action {
     this.data.enable === state;
   }
 }
-
-// const list = [{a:2}, {b:3}]
-// class Item{
-//     constructor(data){
-//         this.data = data;
-//     }
-// }
-// const itemsList = list.map((data) => new Item(data))
