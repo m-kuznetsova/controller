@@ -1,8 +1,7 @@
 class Action {
-  isActive;
   constructor(data){
     this.data = data;
-    this.isActive = isActive;
+    this.isActive;
     this.enable = this.data.enable;
     this.ACTION_EVENT = "action: event";
   }
