@@ -1,5 +1,5 @@
 class KeyboardPlugin {
-  constructor() {
+  constructor({onChange}) {
     this.keyDown = this.keyDown.bind(this);
     this.keyUp = this.keyUp.bind(this);
     this.ACTION_ACTIVATED = "input-controller:action-activated";
@@ -9,6 +9,7 @@ class KeyboardPlugin {
     this.isKeyPressed = this.isKeyPressed.bind(this);
     this.enabled = false;
     this.pressed = [];
+    this.onChange = onChange;
   }
 
   checkAction(action){
@@ -52,6 +53,10 @@ class KeyboardPlugin {
     if (!this.pressed.some((item) => item === keyCode)) this.pressed.push(keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
+    this.onChange();
+    // if (this.isKeyPressed(keyCode)){
+    //   item._active = true;
+    // }
     this.actionState(item.data.name, true, this.target);
   }
 
@@ -59,6 +64,10 @@ class KeyboardPlugin {
     this.pressed = this.pressed.filter( i => i !== keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
+    this.onChange();
+    // if (!this.isKeyPressed(keyCode)){
+    //   item._active = false;
+    // }
     this.actionState(item.data.name, false, this.target);
   }
 

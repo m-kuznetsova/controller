@@ -1,16 +1,30 @@
 class InputController {
-  constructor( actionsToBind, target, registerPlugin ) {
+  constructor( actionsToBind, target) {
     this.target = target;
     this.enabled = false;
     this.focused;
     this.actions = {};
     if (actionsToBind) this.actions = actionsToBind;
-    if (registerPlugin) this.plugins = registerPlugin;
+    this.plugins = [];
+    this.ACTION_ACTIVATED;
+    this.ACTION_DEACTIVATED;
+  }
+
+  registerPlugin(plugin){
+    this.plugins.push(plugin);
     this.plugins.forEach((item) => {
       this.ACTION_ACTIVATED = item.ACTION_ACTIVATED;
       this.ACTION_DEACTIVATED = item.ACTION_DEACTIVATED;
     })
     this.setActionsAndTarget();
+  }
+
+  onPluginChange(){
+    console.log(this, this.plugins)
+    const plugin = this.plugins.find((item) => item.checkAction(this.actions.find((item) => item._active === true)));
+    const actions = plugin.actions.find((item) => item._active === true);
+    console.log(this.actions.find((item) => item._active === true));
+    return {plugin, actions}
   }
 
   setActionsAndTarget(){
@@ -19,8 +33,10 @@ class InputController {
 
   isActionActive(action){
     if (!this.enabled) return;
-    const plugin = this.plugins.find((item) => item.checkAction(this.actions.find((item) => item.data.name === action)));
-    return plugin ? plugin.isActionActive(action) : null;
+    console.log(this, this.plugins)
+    // const plugin = this.plugins.find((item) => item.checkAction(this.actions.find((item) => item.data.name === action)));
+    // console.log(this.onPluginChange());
+    return this.onPluginChange().actions._active;
   }
 
   setEnabled(state){
