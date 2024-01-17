@@ -1,20 +1,21 @@
 class Action {
-  constructor(data){
+  _active = false;
+  constructor(data, onChange){
+    this.onChange = onChange;
     this.data = data;
-    this.isActive;
     this.enable = this.data.enable;
     this.ACTION_EVENT = "action: event";
   }
 
-  set activeState(state){
-    if (state === this.isActive) return; 
-    this.onChange();
-    this.isActive = state;
+  set active(state){
+    if (state === this._active) return; 
+    this.onChange(this);
+    this._active = state;
   }
 
-  get activeState(){
+  get active(){
     this.addEventListener(this.ACTION_ACTIVATED, () => {}, false);
-    return this.isActive;
+    return this._active;
   }
 
   onChange(){
