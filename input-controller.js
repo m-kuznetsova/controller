@@ -19,24 +19,18 @@ class InputController {
     this.setActionsAndTarget();
   }
 
-  onPluginChange(){
-    console.log(this, this.plugins)
-    const plugin = this.plugins.find((item) => item.checkAction(this.actions.find((item) => item._active === true)));
-    const actions = plugin.actions.find((item) => item._active === true);
-    console.log(this.actions.find((item) => item._active === true));
-    return {plugin, actions}
-  }
-
   setActionsAndTarget(){
     this.plugins.forEach((item) => {item.setActionsAndTarget(this.actions, this.target)})
   }
 
-  isActionActive(action){
+  onPluginChange(){
     if (!this.enabled) return;
-    console.log(this, this.plugins)
-    // const plugin = this.plugins.find((item) => item.checkAction(this.actions.find((item) => item.data.name === action)));
-    // console.log(this.onPluginChange());
-    return this.onPluginChange().actions._active;
+    this.actions.forEach((action) => action.active = this.plugins.some((plugin) => plugin.checkAction(action)));
+  }
+
+  isActionActive(action){
+    if (!this.enabled || this.actions.find((item) => item.data.name === action).enable === false) return;
+    return this.actions.find((item) => item.data.name === action).active;
   }
 
   setEnabled(state){

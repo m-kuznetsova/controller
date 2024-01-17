@@ -53,10 +53,10 @@ class KeyboardPlugin {
     if (!this.pressed.some((item) => item === keyCode)) this.pressed.push(keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    this.onChange();
-    // if (this.isKeyPressed(keyCode)){
-    //   item._active = true;
-    // }
+    if (this.isKeyPressed(keyCode)){
+      item._active = true;
+    }
+    this.onChange.bind(this);
     this.actionState(item.data.name, true, this.target);
   }
 
@@ -64,10 +64,10 @@ class KeyboardPlugin {
     this.pressed = this.pressed.filter( i => i !== keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    this.onChange();
-    // if (!this.isKeyPressed(keyCode)){
-    //   item._active = false;
-    // }
+    if (!this.isKeyPressed(keyCode)){
+      item._active = false;
+    }
+    this.onChange.bind(this);
     this.actionState(item.data.name, false, this.target);
   }
 
