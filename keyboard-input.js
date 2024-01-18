@@ -1,5 +1,5 @@
 class KeyboardPlugin {
-  constructor({onChange}) {
+  constructor({onChange, controller}) {
     this.keyDown = this.keyDown.bind(this);
     this.keyUp = this.keyUp.bind(this);
     this.ACTION_ACTIVATED = "input-controller:action-activated";
@@ -9,7 +9,7 @@ class KeyboardPlugin {
     this.isKeyPressed = this.isKeyPressed.bind(this);
     this.enabled = false;
     this.pressed = [];
-    this.onChange = onChange;
+    this.onChange = onChange.bind(controller);
   }
 
   checkAction(action){
@@ -40,8 +40,8 @@ class KeyboardPlugin {
 
   actionState(action, isActionActive, target){
     if (!action) {return};
-    this.onChange.bind(this);
-    // this.onChange();
+    // this.onChange.bind(this.controller);
+    this.onChange();
     let actionEvent = isActionActive ? new CustomEvent(this.ACTION_ACTIVATED, {detail: {action: action}}) : new CustomEvent(this.ACTION_DEACTIVATED, {detail: {action: action}});
     target.dispatchEvent(actionEvent);
   }

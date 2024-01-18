@@ -32,7 +32,7 @@ class InputController {
 
   isActionActive(action){
     // if ( this.actions.find((item) => item.data.name === action).enable === false) return;
-    // console.log(this.actions);
+    console.log(this.actions);
     return this.actions.find((item) => item.data.name === action).active;
   }
 
