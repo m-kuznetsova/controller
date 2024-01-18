@@ -24,15 +24,15 @@ class InputController {
   }
 
   onPluginChange(){
-    // console.log("1111", this);
-    // console.log("1111", this.plugins.some((plugin) => plugin.checkAction(action)));
     if (!this.enabled) return;
-    this.actions.forEach((action) => action.active = this.plugins.some((plugin) => plugin.checkAction(action)));
+    this.actions.forEach((action) => {
+      if (action.enable != false) {
+        action.active = this.plugins.some((plugin) => plugin.checkAction(action))
+      }
+    });
   }
 
   isActionActive(action){
-    // if ( this.actions.find((item) => item.data.name === action).enable === false) return;
-    console.log(this.actions);
     return this.actions.find((item) => item.data.name === action).active;
   }
 

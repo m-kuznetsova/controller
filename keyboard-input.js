@@ -13,7 +13,6 @@ class KeyboardPlugin {
   }
 
   checkAction(action){
-    console.log(action.data.keys.some((item) => this.isKeyPressed(item)))
     return action.data.keys.some((item) => this.isKeyPressed(item));
   }
 
@@ -40,7 +39,6 @@ class KeyboardPlugin {
 
   actionState(action, isActionActive, target){
     if (!action) {return};
-    // this.onChange.bind(this.controller);
     this.onChange();
     let actionEvent = isActionActive ? new CustomEvent(this.ACTION_ACTIVATED, {detail: {action: action}}) : new CustomEvent(this.ACTION_DEACTIVATED, {detail: {action: action}});
     target.dispatchEvent(actionEvent);
@@ -50,9 +48,6 @@ class KeyboardPlugin {
     if (!this.pressed.some((item) => item === keyCode)) this.pressed.push(keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    // if (this.isKeyPressed(keyCode)){
-    //   item._active = true;
-    // }
     this.actionState(item.data.name, true, this.target);
   }
 
@@ -60,9 +55,6 @@ class KeyboardPlugin {
     this.pressed = this.pressed.filter( i => i !== keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    // if (!this.isKeyPressed(keyCode)){
-    //   item._active = false;
-    // }
     this.actionState(item.data.name, false, this.target);
   }
 
