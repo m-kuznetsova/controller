@@ -13,6 +13,7 @@ class KeyboardPlugin {
   }
 
   checkAction(action){
+    console.log(action.data.keys.some((item) => this.isKeyPressed(item)))
     return action.data.keys.some((item) => this.isKeyPressed(item));
   }
 
@@ -37,14 +38,10 @@ class KeyboardPlugin {
     }
   }
 
-  isActionActive(action){
-    if (!this.enabled) {return}
-    if (this.actions.find((item) => item.data.name === action).data.enable === false) {return false}
-    return this.actions.find((item) => item.data.name === action).data.keys.find( key => this.isKeyPressed(key)) ? true : false;
-  }
-
   actionState(action, isActionActive, target){
     if (!action) {return};
+    this.onChange.bind(this);
+    // this.onChange();
     let actionEvent = isActionActive ? new CustomEvent(this.ACTION_ACTIVATED, {detail: {action: action}}) : new CustomEvent(this.ACTION_DEACTIVATED, {detail: {action: action}});
     target.dispatchEvent(actionEvent);
   }
@@ -53,10 +50,9 @@ class KeyboardPlugin {
     if (!this.pressed.some((item) => item === keyCode)) this.pressed.push(keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    if (this.isKeyPressed(keyCode)){
-      item._active = true;
-    }
-    this.onChange.bind(this);
+    // if (this.isKeyPressed(keyCode)){
+    //   item._active = true;
+    // }
     this.actionState(item.data.name, true, this.target);
   }
 
@@ -64,10 +60,9 @@ class KeyboardPlugin {
     this.pressed = this.pressed.filter( i => i !== keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    if (!this.isKeyPressed(keyCode)){
-      item._active = false;
-    }
-    this.onChange.bind(this);
+    // if (!this.isKeyPressed(keyCode)){
+    //   item._active = false;
+    // }
     this.actionState(item.data.name, false, this.target);
   }
 

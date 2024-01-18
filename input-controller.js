@@ -24,12 +24,15 @@ class InputController {
   }
 
   onPluginChange(){
+    // console.log("1111", this);
+    // console.log("1111", this.plugins.some((plugin) => plugin.checkAction(action)));
     if (!this.enabled) return;
     this.actions.forEach((action) => action.active = this.plugins.some((plugin) => plugin.checkAction(action)));
   }
 
   isActionActive(action){
-    if (!this.enabled || this.actions.find((item) => item.data.name === action).enable === false) return;
+    // if ( this.actions.find((item) => item.data.name === action).enable === false) return;
+    // console.log(this.actions);
     return this.actions.find((item) => item.data.name === action).active;
   }
 
