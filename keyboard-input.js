@@ -9,7 +9,7 @@ class KeyboardPlugin {
     this.isKeyPressed = this.isKeyPressed.bind(this);
     this.enabled = false;
     this.pressed = [];
-    this.onChange = onChange.bind(controller);
+    this.onChange = onChange;
   }
 
   checkAction(action){

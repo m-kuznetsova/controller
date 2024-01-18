@@ -2,7 +2,7 @@ const screen = document.querySelector(".main__screen");
 const actionsList = actionsSettings.arr.map((data) => new Action(data));
 
 const controller = new InputController(actionsList, screen);
-const keyboardPlugin = new KeyboardPlugin({onChange: controller.onPluginChange, controller: controller});
+const keyboardPlugin = new KeyboardPlugin({onChange: controller.onPluginChange});
 controller.registerPlugin(keyboardPlugin);
 
 const buttons = document.querySelectorAll(".main__button");

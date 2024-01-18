@@ -8,6 +8,7 @@ class InputController {
     this.plugins = [];
     this.ACTION_ACTIVATED;
     this.ACTION_DEACTIVATED;
+    this.onPluginChange = this.onPluginChange.bind(this);
   }
 
   registerPlugin(plugin){
