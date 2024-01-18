@@ -1,5 +1,5 @@
 class KeyboardPlugin {
-  constructor({onChange, controller}) {
+  constructor({onChange}) {
     this.keyDown = this.keyDown.bind(this);
     this.keyUp = this.keyUp.bind(this);
     this.ACTION_ACTIVATED = "input-controller:action-activated";
