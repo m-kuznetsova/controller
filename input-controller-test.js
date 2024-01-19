@@ -1,7 +1,8 @@
 const screen = document.querySelector(".main__screen");
-const actionsList = actionsSettings.arr.map((data) => new Action(data));
 
-const controller = new InputController(actionsList, screen);
+const controller = new InputController(screen);
+const actionsList = actionsSettings.arr.map((data) => new Action(data, controller.onChange));
+controller.bindActions(actionsList);
 const keyboardPlugin = new KeyboardPlugin({onChange: controller.onPluginChange});
 controller.registerPlugin(keyboardPlugin);
 

@@ -1,18 +1,18 @@
 class Action {
   _active = false;
   constructor(data, onChange){
-    // this.onChange = onChange;
+    this.onChange = onChange;
     this.data = data; 
     this.enable = this.data.enable;
-    this.ACTION_EVENT = "action: event";
   }
 
   set active(state){
-    if (state === this._active) return; 
-    // this.onChange(this); // pass function to construtor
+    // if (state === this._active) return; 
+    console.log("staste ", this._active, state)
     this._active = state;
+    this.count = this.count + 1;
+    this.onChange(this); // pass function to construtor
   }
-
   get active(){
     return this._active;
   }

@@ -2,8 +2,6 @@ class KeyboardPlugin {
   constructor({onChange}) {
     this.keyDown = this.keyDown.bind(this);
     this.keyUp = this.keyUp.bind(this);
-    this.ACTION_ACTIVATED = "input-controller:action-activated";
-    this.ACTION_DEACTIVATED = "input-controller:action-deactivated";
     this.actions = [];
     this.target = null;
     this.isKeyPressed = this.isKeyPressed.bind(this);
@@ -37,25 +35,18 @@ class KeyboardPlugin {
     }
   }
 
-  actionState(action, isActionActive, target){
-    if (!action) {return};
-    this.onChange();
-    let actionEvent = isActionActive ? new CustomEvent(this.ACTION_ACTIVATED, {detail: {action: action}}) : new CustomEvent(this.ACTION_DEACTIVATED, {detail: {action: action}});
-    target.dispatchEvent(actionEvent);
-  }
-
   keyDown({keyCode}){
     if (!this.pressed.some((item) => item === keyCode)) this.pressed.push(keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    this.actionState(item.data.name, true, this.target);
+    this.onChange();
   }
 
   keyUp({keyCode}){
     this.pressed = this.pressed.filter( i => i !== keyCode);
     const item = this.actions.find((item) => item.data.keys.includes(keyCode));
     if (!item) return;
-    this.actionState(item.data.name, false, this.target);
+    this.onChange();
   }
 
   isKeyPressed(keyCode){
