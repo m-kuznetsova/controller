@@ -7,8 +7,7 @@ class Action {
   }
 
   set active(state){
-    // if (state === this._active) return; 
-    console.log("staste ", this._active, state)
+    // if (state === this._active) return; if use this func execute once
     this._active = state;
     this.count = this.count + 1;
     this.onChange(this); // pass function to construtor
