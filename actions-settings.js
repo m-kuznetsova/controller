@@ -3,28 +3,23 @@ const actionsSettings = {
     {
       name: "left",
       keys: [37, 65],
-      enable: false,
-      isActive: false
+      enable: false
     },
     {
       name: "right",
-      keys: [39, 68],
-      isActive: false
+      keys: [39, 68]
     },
     {
       name: "top",
-      keys: [38, 87],
-      isActive: false
+      keys: [38, 87]
     },
     {
       name: "bottom",
-      keys: [40, 83],
-      isActive: false
+      keys: [40, 83]
     },
     {
       name: "space",
-      keys: [32],
-      isActive: false
+      keys: [32]
     }
   ]
 }
