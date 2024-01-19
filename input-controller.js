@@ -12,7 +12,6 @@ class InputController {
   }
 
   onChange(target){
-    // console.log("onchange ", target._active);
     let actionEvent = target._active ? new CustomEvent(this.ACTION_ACTIVATED, {detail: {action: target.data.name}}) : new CustomEvent(this.ACTION_DEACTIVATED, {detail: {action: target.data.name}});
     this.target.dispatchEvent(actionEvent);
   }
@@ -34,9 +33,7 @@ class InputController {
     if (!this.enabled) return;
     this.actions.forEach((action) => {
       if (action.enable != false) {
-        // console.log("1111 ", action.active, this.plugins.some((plugin) => plugin.checkAction(action)))
         action.active = this.plugins.some((plugin) => plugin.checkAction(action));
-        // console.log("2222 ", action.active)
       }
     });
   }
